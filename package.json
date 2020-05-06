@@ -1,5 +1,5 @@
 {
-  "name": "codeserver",
+  "name": "code-server",
   "license": "MIT",
   "version": "3.3.0-rc.4",
   "description": "Run VS Code on a remote server.",

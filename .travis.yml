@@ -1,4 +1,5 @@
-language: nodejs
+language: node_js
+node_js: node
 
 jobs:
   include:
@@ -6,22 +7,24 @@ jobs:
       if: tag IS blank
       script: ./ci/container/exec.sh ./ci/steps/test.sh
       deploy: null
+      install: null
     - name: Linux Release #if: tag IS present
       script: |
         ./ci/steps/linux-release.sh || exit 1
         ./ci/steps/publish-npm.sh || exit 1
+      install: null
     - name: Linux Release #if: tag IS present
+      arch: arm64
       script: |
         sudo apt-get update && sudo apt-get install -y jq || exit 1
         ./ci/steps/linux-release.sh
-      arch: arm64
+      install: null
     - name: MacOS Release #if: tag IS present
       os: osx
-      language: node_js
-      node_js: 12
       script: |
         HOMEBREW_NO_AUTO_UPDATE=1 brew install jq || exit 1
-        ./ci/steps/static-release.sh || exit 1
+        travis_wait 30 ./ci/steps/static-release.sh || exit 1
+      install: null
 
 before_deploy:
   - echo "$JSON_KEY" | base64 --decode > ./ci/key.json
