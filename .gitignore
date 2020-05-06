@@ -1,4 +1,4 @@
-*.tsbuildinfo
+.tsbuildinfo
 .cache
 dist*
 out*

@@ -17,7 +17,9 @@ jobs:
       os: osx
       language: node_js
       node_js: 12
-      script: ./ci/steps/static-release.sh
+      script: |
+        brew install jq || exit 1
+        ./ci/steps/static-release.sh || exit 1
 
 before_deploy:
   - echo "$JSON_KEY" | base64 --decode > ./ci/key.json
@@ -52,4 +54,7 @@ cache:
   timeout: 600
   yarn: true
   directories:
+    - .cache
+    - out
+    - dist
     - lib/vscode/.build/extensions
