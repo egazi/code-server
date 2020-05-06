@@ -1,4 +1,4 @@
-language: minimal
+language: nodejs
 
 jobs:
   include:
@@ -11,14 +11,16 @@ jobs:
         ./ci/steps/linux-release.sh || exit 1
         ./ci/steps/publish-npm.sh || exit 1
     - name: Linux Release #if: tag IS present
-      script: ./ci/steps/linux-release.sh
+      script: |
+        sudo apt-get update && sudo apt-get install -y jq || exit 1
+        ./ci/steps/linux-release.sh
       arch: arm64
     - name: MacOS Release #if: tag IS present
       os: osx
       language: node_js
       node_js: 12
       script: |
-        brew install jq || exit 1
+        HOMEBREW_NO_AUTO_UPDATE=1 brew install jq || exit 1
         ./ci/steps/static-release.sh || exit 1
 
 before_deploy:
